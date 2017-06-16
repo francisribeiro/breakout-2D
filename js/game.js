@@ -17,16 +17,16 @@ var paddleWidth = 75;
 var paddleX = (canvas.width - paddleWidth) / 2;
 
 // Configurações dos tijolos
-var brickRowCount = 3;
-var brickColumnCount = 9;
-var brickWidth = 38;
+var brickRowCount = 5;
+var brickColumnCount = 10;
+var brickWidth = 35;
 var brickHeight = 20;
 var brickPadding = 10;
-var brickOffsetTop = 30;
+var brickOffsetTop = 50;
 var brickOffsetLeft = 30;
-
 var bricks = [];
 
+// Iniciando os tijolos
 for (var c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
     for (var r = 0; r < brickRowCount; r++) {
@@ -45,21 +45,24 @@ var leftPressed = false;
 // Score
 var score = 0;
 
+// Vidas
 var lives = 3;
 
+// Desenha as vidas
 var drawLives = function () {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#C70039";
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
 }
 
+// Desenha o score
 var drawScore = function () {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#2ECC71";
     ctx.fillText("Score: " + score, 8, 20);
 }
 
-// Alterações em eventos
+// Alterações em eventos de usuário
 var keyDownHandler = function (e) {
     if (e.keyCode == 39)
         rightPressed = true;
@@ -81,11 +84,12 @@ var mouseMoveHandler = function (e) {
     }
 }
 
-// Evento das teclas
+// Evento das teclas e mouse
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
+//Detecção de colisão
 var collisionDetection = function () {
     for (var c = 0; c < brickColumnCount; c++) {
         for (var r = 0; r < brickRowCount; r++) {
@@ -108,7 +112,7 @@ var collisionDetection = function () {
 var drawBall = function () {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#FF5733";
     ctx.fill();
     ctx.closePath();
 }
@@ -117,7 +121,7 @@ var drawBall = function () {
 var drawPaddle = function () {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#581845";
     ctx.fill();
     ctx.closePath();
 }
@@ -133,7 +137,7 @@ var drawBricks = function () {
                 bricks[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
-                ctx.fillStyle = "#0095DD";
+                randomColor();
                 ctx.fill();
                 ctx.closePath();
             }
@@ -141,6 +145,13 @@ var drawBricks = function () {
     }
 }
 
+var randomColor = function () {
+    var r = Math.floor((Math.random() * 255) + 1);
+    var g = Math.floor((Math.random() * 255) + 1);
+    var b = Math.floor((Math.random() * 255) + 1);
+
+    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`;
+}
 
 // Monta o jogo
 var draw = function () {
@@ -183,7 +194,7 @@ var draw = function () {
 
     x += dx;
     y += dy;
-    requestAnimationFrame(draw);
 }
 
-draw();
+
+setInterval(draw, 4);
